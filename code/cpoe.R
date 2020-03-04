@@ -13,6 +13,7 @@ cp_model1 <- gam(complete_pass ~ s(air_yards) + s(yardline_100) +log(ydstogo) + 
                 data=pbp_all, method="REML", family = "binomial")
 pbp_all$cp1 <- predict.gam(cp_model1, pbp_all, type = "response")
 
+#get QB stats
 qbs <- pbp_all %>%
   group_by(name, season) %>%
   summarize (
@@ -25,6 +26,7 @@ qbs <- pbp_all %>%
     lcpoe1 = lag(cpoe1, n = 1, order_by = season)
   )
 
+#y/y correlation
 cor(qbs$cpoe1, qbs$lcpoe1, use = "complete.obs")
 
 
