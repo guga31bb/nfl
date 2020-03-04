@@ -10,4 +10,8 @@
 # To-do list
 * Make sure fix_fumbles works on 2-pt and end of half
 * Update old season QBs
-* Try changing `a-z` in name stuff to `A-z`
+* `fix_pbp.R`
+ * Make "intended for" work
+ * Try changing `a-z` in name stuff to `A-z`
+ * Make sure space in name doesn't break things
+ * Fix QB names in older seasons
