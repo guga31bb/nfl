@@ -262,7 +262,7 @@ fix_fumbles <- function(d) {
 
 get_qbr <- function(y) {
   
-  
+  # Thanks to Thomas Mock for the code
   # Be respectful - always pause between scraping sessions
   
   url <- paste0('https://www.espn.com/nfl/qbr/_/season/',y)
