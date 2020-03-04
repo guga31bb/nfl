@@ -72,18 +72,28 @@ fix_pbp <- function(pbp) {
       pass = if_else(str_detect(desc, "( pass)|(sacked)|(scramble)"), 1, 0),
       rush = if_else(str_detect(desc, "(left end)|(left tackle)|(left guard)|(up the middle)|(right guard)|(right tackle)|(right end)") & pass == 0, 1, 0),
       success = ifelse(epa>0, 1 , 0),
-      passer_player_name = ifelse(play_type == "no_play" & pass == 1, 
-                                  str_extract(desc, "(?<=\\s)[A-Z][a-z]*\\.\\s?[A-Z][A-z]+(\\s(I{2,3})|(IV))?(?=\\s((pass)|(sack)|(scramble)))"),
-                                  passer_player_name),
-      receiver_player_name = ifelse(play_type == "no_play" & str_detect(desc, " pass"), 
-                                    str_extract(desc, 
-                                                "(?<=to\\s)[A-Z][a-z]*\\.\\s?[A-Z][A-z]+(\\s(I{2,3})|(IV))?"),
-                                    receiver_player_name),
-      rusher_player_name = ifelse(play_type == "no_play" & rush == 1, 
-                                  str_extract(desc, "(?<=\\s)[A-Z][a-z]*\\.\\s?[A-Z][A-z]+(\\s(I{2,3})|(IV))?(?=\\s((left end)|(left tackle)|(left guard)|(up the middle)|(right guard)|(right tackle)|(right end)))"),
-                                  rusher_player_name),
+      passer_player_name = 
+        str_replace_all(
+          str_extract(desc, "(?<=\\s)[A-Z][A-z]*\\.\\s?[A-Z][A-z]+(\\s(I{2,3})|(IV))?(?=\\s((pass)|(sack)|(scramble)))"),
+          " ", ""),
+      receiver_player_name = 
+        str_replace_all(
+          str_extract(desc, "(?<=(to|for)\\s)[A-Z][A-z]*\\.\\s?[A-Z][A-z]+(\\s(I{2,3})|(IV))?"),
+          " ", ""),
+      rusher_player_name = 
+        str_replace_all(
+          str_extract(desc, "(?<=\\s)[A-Z][A-z]*\\.\\s?[A-Z][A-z]+(\\s(I{2,3})|(IV))?(?=\\s((left end)|(left tackle)|(left guard)|(up the middle)|(right guard)|(right tackle)|(right end)))"),
+          " ", ""),
       name = ifelse(!is_na(passer_player_name), passer_player_name, rusher_player_name),
-      name = ifelse(name=="G.Minshew II", "G.Minshew", name),
+      name = ifelse(name=="G.MinshewII", "G.Minshew", name),
+      name = ifelse(name=="R.GriffinIII", "R.Griffin", name),
+      name = ifelse(name=="Jos.Allen", "J.Allen", name),
+      name = ifelse(name=="Jo.Freeman", "J.Freeman", name),
+      name = ifelse(name=="Da.Brown", "D.Brown", name),
+      name = ifelse(name=="JJohnson", "J.Johnson", name),
+      name = ifelse(name=="Sh.Hill", "S.Hill", name),
+      name = ifelse(name=="Matt.Moore", "M.Moore", name),
+      name = ifelse(name=="Tr.Brown", "T.Brown", name),
       yards_gained=ifelse(play_type=="no_play",NA,yards_gained),
       play=1,season=year, incomplete_pass=if_else(interception==1, 1, incomplete_pass)
     ) %>%
