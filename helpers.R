@@ -180,7 +180,7 @@ get_cpoe <- function(pbp, old_pbp, y) {
 
 
 # apply completion probability
-apply_completion_probability <- function(p, old, y) 
+apply_completion_probability <- function(p) 
 {
   
   # sort p and create cp column
@@ -190,28 +190,26 @@ apply_completion_probability <- function(p, old, y)
   ## since our data only goes back to 2009, no CP for 2009
   
   # get data from previous three seasons
-  old_data <- readRDS(old) %>%
-    filter(complete_pass == 1 | incomplete_pass == 1 | interception == 1) %>% 
-    filter(air_yards >= -10 & !is.na(receiver_player_id) & !is.na(pass_location) & !is.na(air_yards)) %>% 
-    mutate(air_is_zero=ifelse(air_yards == 0,1,0)) %>%
-    filter(season >= y)
+  passes <- p %>%
+    filter(season >= 2006) %>%
+    filter(complete_pass == 1 | incomplete_pass == 1) %>%
+    filter(!is.na(air_yards) & air_yards >= -10 & !is.na(receiver_player_name) & !is.na(pass_location)) %>%
+    mutate(air_is_zero=ifelse(air_yards == 0,1,0))
+  
   
   # determine CPOE formula
-  cp_model <- gam(complete_pass ~ s(air_yards) + air_is_zero + factor(pass_location),
-                  data=old_data,method="REML")
+  cp_model <- gam(complete_pass ~ s(air_yards) + s(yardline_100) +log(ydstogo) + air_is_zero + 
+                    factor(down) + factor(pass_location) + factor(season),
+                  data=passes, method="REML", family = "binomial")
   
-  # apply CPOE to current season
-  new_data <- p %>%
-    filter(complete_pass == 1 | incomplete_pass == 1 | interception == 1) %>% 
-    filter(air_yards >= -10 & !is.na(receiver_player_id) & !is.na(pass_location)) %>% 
-    mutate(air_is_zero=ifelse(air_yards == 0,1,0))
-  new_data$cp <- predict.gam(cp_model,new_data)
-  new_data <- new_data %>% 
+  # apply CPOE
+  passes$cp <- predict.gam(cp_model, passes, type = "response")
+  passes <- passes %>% 
     select(game_id,play_id,cp)
   
   # merge into p
   p <- p %>%
-    left_join(new_data,by=c("game_id","play_id")) %>% 
+    left_join(passes,by=c("game_id","play_id")) %>% 
     mutate(cp=ifelse(!is.na(cp.y),cp.y,cp.x)) %>% 
     select(-cp.x,-cp.y)
   
