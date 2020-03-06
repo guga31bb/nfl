@@ -114,7 +114,7 @@ for (year in 1999:2019) {
       axis.text.x=element_text(hjust=0.5)
     )   
   
-  ggsave(paste0('output/team_offense_rush_pass/offense_rp',year,'.png'), dpi=800, height=9*.8, width=16*.8)
+  ggsave(paste0('output/team_offense_rush_pass/offense_rp_',year,'.png'), dpi=800, height=9*.8, width=16*.8)
   
 
 }
