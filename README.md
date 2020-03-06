@@ -10,5 +10,3 @@
   
 # To-do list
 * Make sure fix_fumbles works on 2-pt and end of half
-* Fix older team abbrevations
-* Fix the run plays with just "to"
