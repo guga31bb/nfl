@@ -96,6 +96,26 @@ for (year in 1999:2019) {
   
   ggsave(paste0('output/team_tiers/team_tiers_',year,'.png'), dpi=res, height=9*.8, width=16*.8)
   
+  
+  chart %>%
+    ggplot(aes(x = epa_per_rush, y = epa_per_pass)) +
+    geom_image(aes(image = url), size = 0.05, asp = 16/9) +
+    geom_hline(yintercept = mean(chart$epa_per_pass), color = "red", linetype = "dashed") +
+    geom_vline(xintercept =  mean(chart$epa_per_rush), color = "red", linetype = "dashed") +
+    labs(x = "Rush EPA/play",
+         y = "Dropback EPA/play",
+         caption = "Figure: @bbaldwin | Data: @nflscrapR",
+         title = paste(year, "Offensive efficiency")) +
+    theme_bw() +
+    theme(
+      legend.position = c(0.99, 0.99),
+      legend.justification = c(1, 1) ,
+      plot.title = element_text(size = 16, hjust = 0.5),
+      axis.text.x=element_text(hjust=0.5)
+    )   
+  
+  ggsave(paste0('output/team_offense_rush_pass/offense_rp',year,'.png'), dpi=800, height=9*.8, width=16*.8)
+  
 
 }
 
