@@ -8,10 +8,10 @@ pbp_all <- readRDS("data/pbp_all.rds") %>%
   mutate(air_is_zero=ifelse(air_yards == 0,1,0))
   
 # add cp
-cp_model1 <- gam(complete_pass ~ s(air_yards) + s(yardline_100) +log(ydstogo) + air_is_zero + 
+cp_model <- gam(complete_pass ~ s(air_yards) + s(yardline_100) +log(ydstogo) + air_is_zero + 
                   factor(down) + factor(pass_location) + factor(season),
                 data=pbp_all, method="REML", family = "binomial")
-pbp_all$cp1 <- predict.gam(cp_model1, pbp_all, type = "response")
+pbp_all$cp <- predict.gam(cp_model, pbp_all, type = "response")
 
 #get QB stats
 qbs <- pbp_all %>%

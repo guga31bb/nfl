@@ -25,10 +25,13 @@ pbp_all <- dplyr::bind_rows(datalist)
 
 pbp_all <- pbp_all %>% 
   mutate_at(vars(home_team, away_team, posteam, defteam), funs(case_when(
-    . %in% "JAX" ~ "JAC",
+    . %in% "JAC" ~ "JAX",
     . %in% "STL" ~ "LA",
     . %in% "SL" ~ "LA",
     . %in% "ARZ" ~ "ARI",
+    . %in% "BLT" ~ "BAL",
+    . %in% "CLV" ~ "CLE",
+    . %in% "HST" ~ "HOU",
     . %in% "SD" ~ "LAC",
     TRUE ~ .
   ))) 
@@ -55,7 +58,11 @@ results <- read_csv("http://www.habitatring.com/games.csv") %>%
   mutate_at(vars(team), funs(case_when(
     . %in% "JAC" ~ "JAX",
     . %in% "STL" ~ "LA",
-    . %in% "LAR" ~ "LA",
+    . %in% "SL" ~ "LA",
+    . %in% "ARZ" ~ "ARI",
+    . %in% "BLT" ~ "BAL",
+    . %in% "CLV" ~ "CLE",
+    . %in% "HST" ~ "HOU",
     . %in% "SD" ~ "LAC",
     TRUE ~ .
   )))
