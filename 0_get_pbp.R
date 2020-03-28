@@ -47,8 +47,8 @@ pbp_all <- readRDS("data/pbp_all.rds")
 results <- read_csv("http://www.habitatring.com/games.csv") %>%
   filter(season >= 1999 & !is.na(result) & week <= 17) %>%
   gather(away_team, home_team, key = "type", value = "team") %>%
-  arrange(game_id) %>% select(game_id, season, result, type, team, home_score, away_score) %>%
-  mutate(game_id = as.character(game_id), 
+  arrange(game_id) %>% select(game_id, season, result, type, team, home_score, away_score, week) %>%
+  mutate(game_id = as.numeric(game_id), 
          result = ifelse(type == "home_team", result, -result),
          points_scored = ifelse(type == "home_team", home_score, away_score),
          points_allowed = ifelse(type == "home_team", away_score, home_score),

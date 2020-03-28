@@ -89,6 +89,8 @@ fix_pbp <- function(pbp) {
       name = ifelse(name=="G.MinshewII", "G.Minshew", name),
       name = ifelse(name=="R.GriffinIII", "R.Griffin", name),
       name = ifelse(name=="Jos.Allen", "J.Allen", name),
+      name = ifelse(str_detect(desc, "Alex Smith"), "A.Smith", name),
+      name = ifelse(name=="Ale.Smith", "A.Smith", name),
       name = ifelse(name=="Jo.Freeman", "J.Freeman", name),
       name = ifelse(name=="Da.Brown", "D.Brown", name),
       name = ifelse(name=="JJohnson", "J.Johnson", name),
@@ -354,7 +356,10 @@ get_pbwr <- function() {
 
 
 get_dvoa <- function(year, week) {
-  
+
+  #future project: login to scrape this
+  #https://www.footballoutsiders.com/foplus/dvoa-database/dvoa-specific-week?year=1999&week=4&offense_defense=offense
+  #https://github.com/rstudio/webinars/blob/master/32-Web-Scraping/navigation-and-authentication.md
   #note: week 10 for 2015 is broken
   
   #for testing

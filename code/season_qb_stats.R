@@ -6,7 +6,7 @@ source("helpers.R")
 # *********************************************************************************
 
 
-qb_min <- 320 #min # of action plays to be included in tables
+qb_min <- 150 #min # of action plays to be included in tables
 
 
 # *********************************************************************************
@@ -42,7 +42,7 @@ qbs <- pbp_all %>%
     success = mean(success),
     index = 0.248070 * epa + 0.006686 * cpoe + 0.080851
   ) %>%
-  filter(n_db > 50 & n_plays >= 320) %>% ungroup() %>%
+  filter(n_db > 50 & n_plays >= qb_min) %>% ungroup() %>%
   group_by(name) %>%
   mutate(
     lcpoe = lag(cpoe, n = 1, order_by = season),
@@ -95,7 +95,7 @@ for (year in 2006:2019) {
     tab_source_note(
       source_note = paste("Table: @benbbaldwin | Data: @nflscrapR | 
       Adjusted EPA per play caps negative EPA at -4.5 | QBs not penalized for fumbles after catches | 
-      CPOE = Completion Percentage Over Expectation based on target depth. | Min", qb_min, "dropbacks |
+      CPOE = Completion Percentage Over Expectation based on target depth. | Min", qb_min, "plays |
       Composite formula: 0.25*EPA + 0.007*CPOE + 0.08 based on coefficients which best predict EPA/play in following year")) %>%
     tab_style(
       style = list(
