@@ -14,12 +14,10 @@ qb_min <- 150 #min # of action plays to be included in tables
 # *********************************************************************************
 
 pbp_all <- readRDS("data/pbp_all.rds") %>%
+  filter(season >= 2006) %>%
   fix_pbp() %>%
-  filter(season >= 2006)
-
-pbp_all <- apply_completion_probability(pbp_all)
-
-pbp_all <- fix_fumbles(pbp_all)
+  apply_completion_probability() %>%
+  fix_fumbles()
 
 
 # *********************************************************************************

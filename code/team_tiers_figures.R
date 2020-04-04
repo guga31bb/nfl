@@ -14,7 +14,6 @@ year <- 2019
 #################################################################
 # Read data
 #################################################################
-# can't use fix_pbp() here bc it crashes rstudio.cloud
 pbp_all <- readRDS("data/pbp_all.rds") %>%
   fix_pbp()
 
