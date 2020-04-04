@@ -12,6 +12,8 @@ library(glue)
 library(janitor)
 library(tidyverse)
 
+library(espnscrapeR)
+
 #functions
 
 #scrape
@@ -266,26 +268,14 @@ get_qbr <- function(y) {
   # Thanks to Thomas Mock for the code
   # Be respectful - always pause between scraping sessions
   
-  url <- paste0('https://www.espn.com/nfl/qbr/_/season/',y)
+  r <- get_nfl_qbr(y, season_type = "Regular") %>%
+    select(short_name, season, qbr_total) %>%
+    dplyr::rename(
+      name = short_name,
+      qbr = qbr_total
+    )
   
-  # Build up URL
-  raw_table <- url %>% 
-    read_html() %>% 
-    html_table() 
-  
-  comb_df <- cbind(raw_table[[1]], raw_table[[2]])
-  
-  r <- comb_df %>% 
-    janitor::clean_names() %>% 
-    as_tibble() %>% 
-    mutate(season = y) %>% 
-    mutate(team = str_sub(name, -3)) %>% 
-    mutate(team = str_remove(team, "[:lower:]+"),
-           name = str_remove(name, team)) %>%
-    separate(name, c("f","l"), sep= " ") %>%
-    mutate(f=substr(f, 1, 1),
-           name = paste0(f,".",l)) %>%
-    select(name, season, qbr)
+  r$name <- gsub(" ", "", r$name, fixed = TRUE)
   
   return(r)
   
